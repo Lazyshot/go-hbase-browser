@@ -83,7 +83,12 @@ func main() {
 		}
 	}())
 
-	r.Run(":8888")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8888"
+	}
+
+	r.Run(":" + port)
 }
 
 func ResultRowToMap(rr *hbase.ResultRow) map[string]interface{} {
