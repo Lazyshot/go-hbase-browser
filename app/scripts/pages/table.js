@@ -39,6 +39,14 @@ module.exports = Table = React.createClass({
 		window.rows = rows;
 		window._ = _;
 
+		var fams = _.without(_.uniq(_.flatten(_.map(rows, (row) => {
+			return _.keys(row);
+		}))), 'key');
+
+		var createFamilyHeader = (fam) => {
+			return <th>{fam}</th>
+		};
+
 		return (
 			<div className="table-container">
 				<div className="form-inline">
@@ -62,39 +70,44 @@ module.exports = Table = React.createClass({
 
 					<Button onClick={this.apply}>Apply</Button>
 				</div>
-				<table className="table table-striped">
-					<thead>
-						<tr>
-							<th>Key</th>
-						</tr>
-					</thead>
-					<tbody>
-						{rows.map(this.renderRow)}
-					</tbody>
-				</table>
+				<div className="table-responsive">
+					<table className="table table-striped">
+						<thead>
+							<tr>
+								<th>Key</th>
+								{fams.map(createFamilyHeader)}
+							</tr>
+						</thead>
+						<tbody>
+							{rows.map(this.renderRow(fams))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		);
 	},
 
-	renderRow(row) {
-		var key = row.key;
+	renderRow(fams) {
+		return (row) => {
+			var key = row.key;
 
-		var values = _.flatten(_.map(_.omit(row, 'key'), (fam, k) => {
-			return _.map(fam, (v, col) => {
-				return k + ":" + col + " = " + v;
-			})
-		}));
+			var createFamilyRow = (fam) => {
+				var values = _.map(row[fam], (v, col) => {
+					return <span>{col + " = " + v}</span>;
+				})
 
-		return (
-			<tr key={key}>
-				<td>
-					{key}
-				</td>
-				<td>
-					{values.join("\t")}
-				</td>
-			</tr>
-		)
+				return <td>{values}</td>;
+			}
+
+			return (
+				<tr key={key}>
+					<td>
+						{key}
+					</td>
+					{fams.map(createFamilyRow)}
+				</tr>
+			)
+		}
 	},
 
 	change(field) {

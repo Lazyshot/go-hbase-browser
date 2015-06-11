@@ -15,3 +15,16 @@ $icon-font-path: "/fonts/";
 		margin-right: 8px;
 	}
 }
+
+.table-container {
+	table {
+		overflow-x: scroll;
+
+		td span {
+			background-color: #f0f0f0;
+			border-radius: 3px;
+			padding: 5px;
+			margin: 0 2px;
+		}
+	}
+}
