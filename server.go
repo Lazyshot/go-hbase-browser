@@ -5,7 +5,6 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/lazyshot/go-hbase"
 
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -75,7 +74,6 @@ func main() {
 		return func(c *gin.Context) {
 			i, err := AssetInfo("dist/" + strings.TrimPrefix(c.Request.URL.Path, "/"))
 			if err != nil {
-				log.Println(err)
 				i, _ = AssetInfo("dist/index.html")
 				f, _ := fs.Open("index.html")
 				http.ServeContent(c.Writer, c.Request, i.Name(), i.ModTime(), f)
